@@ -22,15 +22,28 @@ struct LibraryView: View {
       }
       
       .navigationTitle("Home")
+      .navigationSubtitle("15 April 2026")
+      .toolbarTitleDisplayMode(.inlineLarge)
       .toolbar{
         ToolbarItem(){
           Image(systemName: "line.3.horizontal.decrease")
         }
         ToolbarSpacer(placement: .topBarTrailing)
         ToolbarItem(placement: .topBarTrailing){
-          Text("Select").padding()
+          Menu {
+            Button("Select", systemImage: "") {
+              // action
+            }
+          } label : {
+            Text("Select").padding()
+          }
+          
         }
       }
     }
   }
+}
+
+#Preview {
+  LibraryView()
 }
