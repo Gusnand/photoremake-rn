@@ -14,7 +14,7 @@ struct ImageItemView: View {
       }label: {
         Label("Save", systemImage: "chevron.forward")
       }
-    }
+    }.preferredColorScheme(.dark)
   }
 }
 

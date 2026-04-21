@@ -6,7 +6,7 @@ struct ContentViewRemake: View {
   var body: some View {
     TabView {
       Tab("Library", systemImage: "photo.fill.on.rectangle.fill") {
-        LibraryView(imageArray: $imageArray)
+        LibraryViewRemake(imageArray: $imageArray)
       }
       Tab("Collection", systemImage: "photo.stack") {
         CollectionViewRemake()
