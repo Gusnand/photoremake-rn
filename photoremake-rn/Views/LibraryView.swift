@@ -1,22 +1,23 @@
-
 import SwiftUI
 
 struct LibraryView: View {
   let columns = [GridItem(.flexible(), spacing: 1), GridItem(.flexible(), spacing: 1), GridItem(.flexible(), spacing: 1)]
   let images = (10...20).map {"photo_\($0)"}
   
+  @Binding var imageArray: [ImageDetail]
+  
   var body: some View {
     NavigationStack{
       
       ScrollView{
         LazyVGrid(columns: columns, spacing: 1) {
-          ForEach(images, id: \..self) {image in
-            Image(image)
-              .resizable()
-              .scaledToFill()
-              .frame(height:120)
-              .clipped()
-              .clipShape(RoundedRectangle(cornerRadius: 4))
+          ForEach($imageArray) {image in
+            NavigationLink {
+              ImageItemView(image: image, caption: "")
+            } label: {
+              Image(image.filename
+                .wrappedValue).resizable().scaledToFill().frame(height: 120).clipped().clipShape(RoundedRectangle(cornerRadius: 4))
+            }
           }
         }
       }
@@ -37,13 +38,12 @@ struct LibraryView: View {
           } label : {
             Text("Select").padding()
           }
-          
         }
       }
-    }
+    }.preferredColorScheme(.dark)
   }
 }
 
 #Preview {
-  LibraryView()
+  LibraryView(imageArray: .constant(ImageDetail.gallery))
 }

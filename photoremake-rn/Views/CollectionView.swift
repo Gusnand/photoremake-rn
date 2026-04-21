@@ -17,14 +17,14 @@ struct CollectionView: View {
                     .resizable()
                     .scaledToFill()
                     .frame(height:180)
-                    .overlay(alignment: .bottomLeading){
+                    .overlay(){
                       LinearGradient(
                         colors: [.clear, .black.opacity(0.6)],
                         startPoint: .center,
                         endPoint: .bottom,
                       )
                       
-                      Text("WhatsApp").font(.subheadline).fontWeight(.semibold).foregroundStyle(.white).padding(12)
+                      
                       //                      Text("Whatsapp").font(.caption).foregroundStyle(.white).fontWeight(.regular).padding(8)
                       //                        .frame(maxWidth: .infinity, alignment: .leading)
                       //                        .background(LinearGradient(
@@ -33,15 +33,17 @@ struct CollectionView: View {
                       //                        ))
                       //                        .clipShape(RoundedRectangle(cornerRadius: 48))
                     }
+                    .overlay(alignment: .bottomLeading){
+                      Text("WhatsApp").font(.subheadline).fontWeight(.semibold).foregroundStyle(.white).padding(12)
+                    }
                     .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-                  
                 }
               }
             }
           }.listStyle(.plain).foregroundStyle(.primary)
           
           DisclosureGroup("Pinned") {
-            ScrollView(.horizontal) {
+            ScrollView(.horizontal, showsIndicators: false) {
               HStack(spacing: 5){
                 ForEach(images, id: \..self) {image in
                   Image(image)
@@ -64,7 +66,7 @@ struct CollectionView: View {
           }.listStyle(.plain).foregroundStyle(.primary)
           
           DisclosureGroup("Albums") {
-            ScrollView(.horizontal) {
+            ScrollView(.horizontal, showsIndicators: false) {
               HStack(spacing: 5){
                 ForEach(images, id: \..self) {image in
                   Image(image)
@@ -87,7 +89,7 @@ struct CollectionView: View {
           }.listStyle(.plain).foregroundStyle(.primary)
           
           DisclosureGroup("People") {
-            ScrollView(.horizontal) {
+            ScrollView(.horizontal, showsIndicators: false) {
               HStack(spacing: 5){
                 ForEach(images, id: \..self) {image in
                   Image(image)
@@ -110,7 +112,7 @@ struct CollectionView: View {
           }.listStyle(.plain).foregroundStyle(.primary)
           
           DisclosureGroup("Featured Photos") {
-            ScrollView(.horizontal) {
+            ScrollView(.horizontal, showsIndicators: false) {
               HStack(spacing: 5){
                 ForEach(images, id: \..self) {image in
                   Image(image)
@@ -131,58 +133,59 @@ struct CollectionView: View {
               }
             }
           }.listStyle(.plain).foregroundStyle(.primary)
-        }
+        }.scrollIndicators(.hidden)
         
-        .navigationTitle("Collection")
-        .toolbar{
-          ToolbarItem(placement: .topBarTrailing){
-            Menu {
-              ControlGroup {
-                Button {
-                  // action
-                } label :{
-                  Image(systemName: "rectangle.grid.3x1.fill")
+          .navigationTitle("Collection")
+          .toolbarTitleDisplayMode(.inlineLarge)
+          .toolbar{
+            ToolbarItem(placement: .topBarTrailing){
+              Menu {
+                ControlGroup {
+                  Button {
+                    // action
+                  } label :{
+                    Image(systemName: "rectangle.grid.3x1.fill")
+                  }
+                  Button {
+                    // action
+                  } label :{
+                    Image(systemName: "rectangle.grid.3x3.fill")
+                  }
+                  Button {
+                    // action
+                  } label :{
+                    Image(systemName: "rectangle.grid.2x2.fill")
+                  }
                 }
-                Button {
+                
+                Button("Show All", systemImage: "") {
                   // action
-                } label :{
-                  Image(systemName: "rectangle.grid.3x3.fill")
                 }
-                Button {
+                Button("Collapse All", systemImage: "") {
                   // action
-                } label :{
-                  Image(systemName: "rectangle.grid.2x2.fill")
                 }
+                Divider()
+                Button ("Reorder", systemImage: "") {
+                  // action
+                }
+              } label: {
+                Image(systemName: "ellipsis")
               }
               
-              Button("Show All", systemImage: "") {
-                // action
-              }
-              Button("Collapse All", systemImage: "") {
-                // action
-              }
-              Divider()
-              Button ("Reorder", systemImage: "") {
-                // action
-              }
-            } label: {
-              Image(systemName: "ellipsis")
+              
             }
-            
-            
+            ToolbarSpacer(placement: .topBarTrailing)
+            ToolbarItem(placement: .primaryAction){
+              Button(action: {
+                //action
+              }) {
+                Image(systemName: "person.fill")
+              }.buttonStyle(.bordered)
+            }
           }
-          ToolbarSpacer(placement: .topBarTrailing)
-          ToolbarItem(placement: .primaryAction){
-            Button(action: {
-              //action
-            }) {
-              Image(systemName: "person.fill")
-            }.buttonStyle(.bordered)
-          }
-        }
         
       }.padding()
-    }
+    }.preferredColorScheme(.dark)
     
   }
 }
