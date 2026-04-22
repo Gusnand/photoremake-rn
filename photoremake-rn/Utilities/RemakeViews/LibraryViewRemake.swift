@@ -7,7 +7,10 @@ struct LibraryViewRemake: View {
   @State private var isSelectMode = false
   @State private var selectedPhotos : Set<ImageDetail> = []
   
-  let columns = [GridItem(.flexible(), spacing: 1), GridItem(.flexible(), spacing: 1), GridItem(.flexible(), spacing: 1)]
+  let columns = [
+    GridItem(.flexible(), spacing: 1),
+    GridItem(.flexible(), spacing: 1),
+    GridItem(.flexible(), spacing: 1)]
   
   var body: some View {
     NavigationStack{

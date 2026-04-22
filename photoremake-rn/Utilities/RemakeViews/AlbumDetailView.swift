@@ -1,17 +1,99 @@
 import SwiftUI
 
 struct AlbumDetailView: View {
+  let columns = [
+    GridItem(.flexible(), spacing: 1),
+    GridItem(.flexible(), spacing: 1),
+    GridItem(.flexible(), spacing: 1),
+  ]
+  
   @Binding var album: ImportantAlbum
+  @State private var isSelectMode = false
+  @State private var selectedPhotos: Set<ImageDetail> = []
   
   var body: some View {
     ScrollView {
-      Text("Welcome to the \(album.title) album").padding()
-      Text("There are \(album.count) photos here").foregroundColor(.gray)
-    }.navigationTitle(album.title)
-      .navigationBarTitleDisplayMode(.inline)
+      HStack {
+        Text("\(album.count) Photos")
+          .font(.subheadline)
+          .foregroundColor(.gray)
+        Spacer()
+      }
+      .padding(.horizontal)
+      .padding(.bottom, 8)
+      
+      LazyVGrid (columns: columns, spacing: 1) {
+        ForEach($album.photos) { $photo in
+          if isSelectMode {
+            Image(photo.filename).resizable().scaledToFill().frame(height: 120).clipped()
+              .overlay(alignment: .bottomTrailing) {
+                Image(systemName: selectedPhotos.contains(photo) ? "checkmark.circle.fill" : "circle")
+                  .font(.title3)
+                  .foregroundStyle(selectedPhotos.contains(photo) ? .blue : .white.opacity(0.8))
+                  .padding(1)
+              }.onTapGesture {
+                if isSelectMode {
+                  if selectedPhotos.contains(photo) {
+                    selectedPhotos.remove(photo)
+                  }else{
+                    selectedPhotos.insert(photo)
+                  }
+                }
+              }
+          }else {
+            NavigationLink {
+              ImageItemView(image: $photo, caption: "")
+            } label : {
+              Image(photo.filename).resizable().scaledToFill().frame(height: 120).clipped()
+            }
+          }
+        }
+      }
+    }
+    .navigationTitle(album.title)
+    .navigationBarTitleDisplayMode(.inline)
+    .toolbar(isSelectMode ? .hidden : .visible, for: .tabBar)
+    .preferredColorScheme(.dark)
+    .toolbar {
+      // Top Toolbar (Select/Cancel)
+      ToolbarItem(placement: .topBarTrailing) {
+        if isSelectMode {
+          Button("Cancel") {
+            isSelectMode = false
+            selectedPhotos.removeAll()
+          }
+        } else {
+          Button("Select") {
+            isSelectMode = true
+          }
+        }
+      }
+      
+      // Bottom Toolbar (Actions)
+      if isSelectMode {
+        ToolbarItemGroup(placement: .bottomBar) {
+          Button(action: { /* Share Action */ }) {
+            Image(systemName: "square.and.arrow.up")
+          }.disabled(selectedPhotos.isEmpty)
+          
+          Spacer()
+          
+          Button(action: { /* Delete Action */ }) {
+            Image(systemName: "trash")
+          }.disabled(selectedPhotos.isEmpty)
+        }
+        
+        ToolbarItem(placement: .status) {
+          Text(selectedPhotos.isEmpty ? "Select Items" : "\(selectedPhotos.count) Selected")
+            .font(.subheadline).fontWeight(.semibold)
+        }
+      }
+    }
   }
 }
 
-//#Preview {
-//  AlbumDetailView()
-//}
+#Preview {
+  NavigationStack {
+    AlbumDetailView(album: .constant(ImportantAlbum.mockData[0]))
+  }
+}

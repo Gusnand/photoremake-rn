@@ -17,9 +17,9 @@ struct CollectionViewRemake: View {
           Text("Important Albums").font(.title2).bold()
           Spacer()
           Text("See All").font(.headline).foregroundColor(.blue)
-        }
+        }.scenePadding(.bottom)
         ScrollView{
-          LazyVGrid(columns: columns, spacing: 32) {
+          LazyVGrid(columns: columns, spacing: 18) {
             ForEach($importantAlbums) {$album in
               NavigationLink {
                 AlbumDetailView(album: $album)
