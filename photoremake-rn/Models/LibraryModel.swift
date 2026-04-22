@@ -1,5 +1,66 @@
 import Foundation
 
+// model for ALBUMS
+struct ImportantAlbum: Identifiable {
+  let id = UUID()
+  let order: Int
+  var title: String
+  var count: Int
+  
+#if DEBUG
+  static let mockData: [ImportantAlbum] = [
+    ImportantAlbum(order: 1, title: "Recents", count: 4281),
+    ImportantAlbum(order: 2, title: "Favorites", count: 156),
+    ImportantAlbum(order: 3, title: "Selfies", count: 342),
+    ImportantAlbum(order: 4, title: "Live Photos", count: 1890),
+    ImportantAlbum(order: 5, title: "Portrait", count: 215),
+    ImportantAlbum(order: 6, title: "Panoramas", count: 14)
+  ]
+#endif
+}
+
+struct Album: Identifiable {
+  let id = UUID()
+  var title: String
+  var count: Int
+  
+#if DEBUG
+  static let mockData: [Album] = [
+    Album(title: "Bali Vacation 2023", count: 450),
+    Album(title: "Family", count: 1205),
+    Album(title: "Pets", count: 834),
+    Album(title: "Memes", count: 152),
+    Album(title: "Food & Recipes", count: 89),
+    Album(title: "Travel Ideas", count: 24),
+    Album(title: "Work Receipts", count: 67),
+    Album(title: "Christmas 2022", count: 120),
+    Album(title: "Halloween Outfits", count: 35),
+    Album(title: "Concerts", count: 210),
+    Album(title: "Cross Country Road Trip", count: 642),
+    Album(title: "Sarah's Wedding", count: 315),
+    Album(title: "New York Trip", count: 288),
+    Album(title: "Tokyo Adventures", count: 531),
+    Album(title: "Summer 2021", count: 412),
+    Album(title: "Ski Trip", count: 145),
+    Album(title: "Nature & Landscapes", count: 390),
+    Album(title: "Art References", count: 76),
+    Album(title: "Apartment Hunting", count: 43),
+    Album(title: "Fitness Progress", count: 28),
+    Album(title: "Funny Screenshots", count: 504),
+    Album(title: "Birthdays", count: 198),
+    Album(title: "Camping in Yosemite", count: 260),
+    Album(title: "Car Project", count: 112),
+    Album(title: "College Memories", count: 875),
+    Album(title: "Random / Misc", count: 45)
+  ]
+#endif
+}
+
+// end of model for ALBUMS
+
+
+// model for each images
+
 struct GeoLocation: Hashable, Equatable {
   var longitude: Double
   var latitude: Double
@@ -98,3 +159,4 @@ struct ImageDetail: Identifiable, Hashable, Equatable {
 #endif
 }
 
+// end of model for each images
