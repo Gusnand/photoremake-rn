@@ -5,16 +5,35 @@ struct ImportantAlbum: Identifiable {
   let id = UUID()
   let order: Int
   var title: String
-  var count: Int
+  
+  var photos: [ImageDetail]
+  
+  var count: Int {
+    return photos.count
+  }
+  var coverPhoto: ImageDetail? {
+    return photos.first
+  }
   
 #if DEBUG
   static let mockData: [ImportantAlbum] = [
-    ImportantAlbum(order: 1, title: "Recents", count: 4281),
-    ImportantAlbum(order: 2, title: "Favorites", count: 156),
-    ImportantAlbum(order: 3, title: "Selfies", count: 342),
-    ImportantAlbum(order: 4, title: "Live Photos", count: 1890),
-    ImportantAlbum(order: 5, title: "Portrait", count: 215),
-    ImportantAlbum(order: 6, title: "Panoramas", count: 14)
+    // "Recents" gets ALL OF THE PHOTOS in the gallery model
+    ImportantAlbum(order: 1, title: "Recents", photos: ImageDetail.gallery),
+    
+    // "Favorites" gets just the first 15 photos
+    ImportantAlbum(order: 2, title: "Favorites", photos: Array(ImageDetail.gallery.prefix(15))),
+    
+    // "Selfies" gets the last 8 photos
+    ImportantAlbum(order: 3, title: "Camera", photos: Array(ImageDetail.gallery.suffix(8))),
+    
+    // "Live Photos" skips the first 10, then grabs the next 20
+    ImportantAlbum(order: 4, title: "Videos", photos: Array(ImageDetail.gallery.dropFirst(10).prefix(20))),
+    
+    // "Portrait" gets the first 5 photos
+    ImportantAlbum(order: 5, title: "Airdrop", photos: Array(ImageDetail.gallery.prefix(5))),
+    
+    // "Panoramas" gets just the last 2 photos
+    ImportantAlbum(order: 6, title: "Lightroom", photos: Array(ImageDetail.gallery.suffix(2)))
   ]
 #endif
 }
@@ -85,16 +104,6 @@ struct ImageDetail: Identifiable, Hashable, Equatable {
   
 #if DEBUG
   static let gallery: [ImageDetail] = [
-//    ImageDetail(filename: "photo_\(Int.random(in: 1...60))",
-//                caption: "Golden hour at the coast",
-//                dateTimePictureTaken: .now,
-//                sizeInMegabytes: 6.7,
-//                device: "iPhone 15 Pro Max",
-//                geolocation: GeoLocation(longitude: 5.438473, latitude: -6.748393),
-//                resolution: Resolution(width: 4032, height: 3024),
-//                fileType: "heic",
-//                fileLocation: "hackintosh/hd/lib/photos/coast"),
-
     ImageDetail(filename: "photo_1", caption: "Golden hour at the coast", dateTimePictureTaken: Date(timeIntervalSince1970: 1713715200), sizeInMegabytes: 6.7, device: "iPhone 15 Pro Max", geolocation: GeoLocation(longitude: 5.438473, latitude: -6.748393), resolution: Resolution(width: 4032, height: 3024), fileType: "heic", fileLocation: "hackintosh/hd/lib/photos/coast"),
     ImageDetail(filename: "photo_2", caption: "Mist over the redwoods", dateTimePictureTaken: Date(timeIntervalSince1970: 1713801600), sizeInMegabytes: 5.2, device: "iPhone 15 Pro Max", geolocation: GeoLocation(longitude: -124.0046, latitude: 41.2132), resolution: Resolution(width: 4032, height: 3024), fileType: "heic", fileLocation: "hackintosh/hd/lib/photos/nature"),
     ImageDetail(filename: "photo_3", caption: "Tokyo neon nights", dateTimePictureTaken: Date(timeIntervalSince1970: 1713888000), sizeInMegabytes: 8.1, device: "iPhone 15 Pro Max", geolocation: GeoLocation(longitude: 139.6503, latitude: 35.6762), resolution: Resolution(width: 4032, height: 3024), fileType: "heic", fileLocation: "hackintosh/hd/lib/photos/urban"),
