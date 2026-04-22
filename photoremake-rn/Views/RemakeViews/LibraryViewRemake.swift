@@ -74,16 +74,15 @@ struct LibraryViewRemake: View {
               
               Spacer()
               
-              Text(selectedPhotos.isEmpty ? "Select Items" : "\(selectedPhotos.count) Items Selected").font(.subheadline).fontWeight(.semibold)
-              
-              Spacer()
-              
               Button(action: {
                 //Delete Action
               }){
                 Image(systemName: "trash")
               }.disabled(selectedPhotos.isEmpty)
             }
+            ToolbarItem(placement: .status){
+              Text(selectedPhotos.isEmpty ? "Select Items" : "\(selectedPhotos.count) Items Selected").font(.subheadline).fontWeight(.semibold).fixedSize()
+            }.sharedBackgroundVisibility(.hidden)
           }
         }
       }.preferredColorScheme(.dark)

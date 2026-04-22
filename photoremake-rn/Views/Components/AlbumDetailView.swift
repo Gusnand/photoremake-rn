@@ -85,8 +85,8 @@ struct AlbumDetailView: View {
         
         ToolbarItem(placement: .status) {
           Text(selectedPhotos.isEmpty ? "Select Items" : "\(selectedPhotos.count) Selected")
-            .font(.subheadline).fontWeight(.semibold)
-        }
+            .font(.subheadline).fontWeight(.semibold).fixedSize()
+        }.sharedBackgroundVisibility(.hidden)
       }
     }
   }
