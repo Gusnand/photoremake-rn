@@ -11,7 +11,7 @@ import SwiftUI
 struct photoremake_rnApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentViewRemake()
         }
     }
 }
