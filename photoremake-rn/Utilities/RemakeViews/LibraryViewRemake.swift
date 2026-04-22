@@ -14,9 +14,7 @@ struct LibraryViewRemake: View {
       ScrollView{
         LazyVGrid(columns: columns, spacing: 1) {
           ForEach($imageArray) {$image in
-            NavigationLink {
-              ImageItemView(image: $image, caption: "")
-            } label: {
+            if isSelectMode {
               Image(image.filename).resizable().scaledToFill().frame(height: 120).clipped().clipShape(RoundedRectangle(cornerRadius: 4))
                 .overlay(alignment: .bottomTrailing) {
                   if isSelectMode {
@@ -32,8 +30,13 @@ struct LibraryViewRemake: View {
                     }
                   }
                 }
+            } else {
+              NavigationLink {
+                ImageItemView(image: $image, caption: "")
+              } label: {
+                Image(image.filename).resizable().scaledToFill().frame(height: 120).clipped().clipShape(RoundedRectangle(cornerRadius: 4))
+              }
             }
-            .disabled(isSelectMode)
           }
         }
         
