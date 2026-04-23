@@ -8,7 +8,7 @@ struct AlbumDetailView: View {
   ]
   
   @Binding var album: ImportantAlbum
-  @State private var isSelectMode = false
+  @State private var isSelectShowing = false
   @State private var selectedPhotos: Set<ImageDetail> = []
   
   var body: some View {
@@ -24,7 +24,7 @@ struct AlbumDetailView: View {
       
       LazyVGrid (columns: columns, spacing: 1) {
         ForEach($album.photos) { $photo in
-          if isSelectMode {
+          if isSelectShowing {
             Image(photo.filename).resizable().scaledToFill().frame(height: 120).clipped()
               .overlay(alignment: .bottomTrailing) {
                 Image(systemName: selectedPhotos.contains(photo) ? "checkmark.circle.fill" : "circle")
@@ -32,7 +32,7 @@ struct AlbumDetailView: View {
                   .foregroundStyle(selectedPhotos.contains(photo) ? .blue : .white.opacity(0.8))
                   .padding(1)
               }.onTapGesture {
-                if isSelectMode {
+                if isSelectShowing {
                   if selectedPhotos.contains(photo) {
                     selectedPhotos.remove(photo)
                   }else{
@@ -52,25 +52,25 @@ struct AlbumDetailView: View {
     }
     .navigationTitle(album.title)
     .navigationBarTitleDisplayMode(.inline)
-    .toolbar(isSelectMode ? .hidden : .visible, for: .tabBar)
+    .toolbar(isSelectShowing ? .hidden : .visible, for: .tabBar)
     .preferredColorScheme(.dark)
     .toolbar {
       // Top Toolbar (Select/Cancel)
       ToolbarItem(placement: .topBarTrailing) {
-        if isSelectMode {
+        if isSelectShowing {
           Button("Cancel") {
-            isSelectMode = false
+            isSelectShowing = false
             selectedPhotos.removeAll()
           }
         } else {
           Button("Select") {
-            isSelectMode = true
+            isSelectShowing = true
           }
         }
       }
       
       // Bottom Toolbar (Actions)
-      if isSelectMode {
+      if isSelectShowing {
         ToolbarItemGroup(placement: .bottomBar) {
           Button(action: { /* Share Action */ }) {
             Image(systemName: "square.and.arrow.up")
