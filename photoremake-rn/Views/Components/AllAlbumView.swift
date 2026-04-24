@@ -1,27 +1,20 @@
 import SwiftUI
 
-struct CollectionViewRemake: View {
+struct AllAlbumView: View {
   let columns = [
     GridItem(.flexible(), spacing: 16),
     GridItem(.flexible(), spacing: 16),
     GridItem(.flexible(), spacing: 16)
   ]
   
-  @State private var importantCollection = AllAlbums.mockDataImportantAlbums
+  @State private var AllAlbum = AllAlbums.mockDataAllAlbums
   
   var body: some View {
     NavigationStack{
       VStack (alignment: .leading, spacing: 14){
-        HStack{
-          Text("Important Albums").font(.title3).fontWeight(.light)
-          Spacer()
-          NavigationLink("See All"){
-            AllAlbumView()
-          }
-        }.scenePadding(.bottom)
         ScrollView{
           LazyVGrid(columns: columns, spacing: 18) {
-            ForEach($importantCollection) {$album in
+            ForEach($AllAlbum) {$album in
               NavigationLink {
                 AlbumDetailView(album: $album)
               } label : {
@@ -61,6 +54,7 @@ struct CollectionViewRemake: View {
           }
         }.scrollIndicators(.hidden)
           .navigationTitle("Albums")
+          .navigationBarTitleDisplayMode(.inline)
           .toolbarTitleDisplayMode(.inlineLarge)
           .toolbar{
             ToolbarItem(placement: .topBarTrailing){
@@ -112,5 +106,5 @@ struct CollectionViewRemake: View {
 }
 
 #Preview {
-  CollectionViewRemake()
+  AllAlbumView()
 }

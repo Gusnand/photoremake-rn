@@ -11,9 +11,9 @@ struct ContentViewRemake: View {
       Tab("Collection", systemImage: "photo.stack") {
         CollectionViewRemake()
       }
-      Tab(role: .search) {
-        Text("Search Page")
-      }
+//      Tab(role: .search) {
+//        Text("Search Page")
+//      }
     }
   }
 }
