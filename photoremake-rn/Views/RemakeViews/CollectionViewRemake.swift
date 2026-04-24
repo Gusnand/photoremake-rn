@@ -9,7 +9,6 @@ struct CollectionViewRemake: View {
   
   @State private var importantCollection = AllAlbums.mockDataImportantAlbums
   
-  
   var body: some View {
     NavigationStack{
       VStack (alignment: .leading, spacing: 14){

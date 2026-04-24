@@ -12,9 +12,6 @@ struct AllAlbumView: View {
   var body: some View {
     NavigationStack{
       VStack (alignment: .leading, spacing: 14){
-        HStack{
-          Text("All Albums").font(.title2).bold()
-        }.scenePadding(.bottom)
         ScrollView{
           LazyVGrid(columns: columns, spacing: 18) {
             ForEach($AllAlbum) {$album in
@@ -57,6 +54,7 @@ struct AllAlbumView: View {
           }
         }.scrollIndicators(.hidden)
           .navigationTitle("Albums")
+          .navigationBarTitleDisplayMode(.inline)
           .toolbarTitleDisplayMode(.inlineLarge)
           .toolbar{
             ToolbarItem(placement: .topBarTrailing){
