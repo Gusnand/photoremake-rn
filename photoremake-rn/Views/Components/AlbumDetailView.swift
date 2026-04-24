@@ -7,7 +7,7 @@ struct AlbumDetailView: View {
     GridItem(.flexible(), spacing: 1),
   ]
   
-  @Binding var album: ImportantAlbum
+  @Binding var album: AllAlbums
   @State private var isSelectShowing = false
   @State private var selectedPhotos: Set<ImageDetail> = []
   
@@ -94,6 +94,6 @@ struct AlbumDetailView: View {
 
 #Preview {
   NavigationStack {
-    AlbumDetailView(album: .constant(ImportantAlbum.mockData[0]))
+    AlbumDetailView(album: .constant(AllAlbums.mockDataImportantAlbums[0]))
   }
 }
