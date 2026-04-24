@@ -10,6 +10,7 @@ struct AlbumDetailView: View {
   @Binding var album: AllAlbums
   @State private var isSelectShowing = false
   @State private var selectedPhotos: Set<ImageDetail> = []
+  @State private var isShowingDialog = false
   
   var body: some View {
     ScrollView {
@@ -78,9 +79,21 @@ struct AlbumDetailView: View {
           
           Spacer()
           
-          Button(action: { /* Delete Action */ }) {
+          Button(action: {
+            // remove function
+            isShowingDialog = true
+          }){
             Image(systemName: "trash")
           }.disabled(selectedPhotos.isEmpty)
+            .confirmationDialog(
+              "Are you sure?", isPresented: $isShowingDialog
+            ){
+              Button("Delete \(selectedPhotos.count) Photos", role: .destructive) {
+                album.photos.removeAll (where: {photo in selectedPhotos.contains(photo)})
+              }
+            }message: {
+              Text("These photos will be deleted from iCloud Photos on all your devices. They will be in Recently Deleted for 30 days.")
+            }
         }
         
         ToolbarItem(placement: .status) {
