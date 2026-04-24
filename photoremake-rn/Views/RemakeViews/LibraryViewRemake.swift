@@ -6,6 +6,7 @@ struct LibraryViewRemake: View {
   
   @State private var isSelectMode = false
   @State private var selectedPhotos : Set<ImageDetail> = []
+  @State private var isShowingDialog = false
   
   let columns = [
     GridItem(.flexible(), spacing: 1),
@@ -75,10 +76,20 @@ struct LibraryViewRemake: View {
               Spacer()
               
               Button(action: {
-                //Delete Action
+                // remove function
+                isShowingDialog = true
               }){
                 Image(systemName: "trash")
               }.disabled(selectedPhotos.isEmpty)
+                .confirmationDialog(
+                "Are you sure?", isPresented: $isShowingDialog
+                ){
+                  Button("Delete \(selectedPhotos.count) Photos", role: .destructive) {
+                    imageArray.removeAll (where: {photo in selectedPhotos.contains(photo)})
+                  }
+                }message: {
+                  Text("These photos will be deleted from iCloud Photos on all your devices. They will be in Recently Deleted for 30 days.")
+                }
             }
             ToolbarItem(placement: .status){
               Text(selectedPhotos.isEmpty ? "Select Items" : "\(selectedPhotos.count) Items Selected").font(.subheadline).fontWeight(.semibold).fixedSize()

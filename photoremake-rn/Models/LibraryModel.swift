@@ -1,7 +1,41 @@
 import Foundation
 
-// model for ALBUMS
-struct ImportantAlbum: Identifiable {
+//// model for ALBUMS
+//struct ImportantAlbum: Identifiable {
+//  let id = UUID()
+//  let order: Int
+//  var title: String
+//  
+//  var photos: [ImageDetail]
+//  
+//  var count: Int {
+//    return photos.count
+//  }
+//  var coverPhoto: ImageDetail? {
+//    return photos.first
+//  }
+//  
+//#if DEBUG
+//  static let mockData: [ImportantAlbum] = [
+//    // "Favorites" gets just the first 15 photos
+//    ImportantAlbum(order: 1, title: "Favorites", photos: Array(ImageDetail.gallery.prefix(15))),
+//    
+//    // "Selfies" gets the last 8 photos
+//    ImportantAlbum(order: 2, title: "Camera", photos: Array(ImageDetail.gallery.suffix(8))),
+//    
+//    // "Live Photos" skips the first 10, then grabs the next 20
+//    ImportantAlbum(order: 3, title: "Videos", photos: Array(ImageDetail.gallery.dropFirst(10).prefix(20))),
+//    
+//    // "Portrait" gets the first 5 photos
+//    ImportantAlbum(order: 4, title: "Airdrop", photos: Array(ImageDetail.gallery.prefix(5))),
+//    
+//    // "Panoramas" gets just the last 2 photos
+//    ImportantAlbum(order: 5, title: "Lightroom", photos: Array(ImageDetail.gallery.suffix(2)))
+//  ]
+//#endif
+//}
+
+struct AllAlbums: Identifiable {
   let id = UUID()
   let order: Int
   var title: String
@@ -16,64 +50,77 @@ struct ImportantAlbum: Identifiable {
   }
   
 #if DEBUG
-  static let mockData: [ImportantAlbum] = [
-    // "Recents" gets ALL OF THE PHOTOS in the gallery model
-    ImportantAlbum(order: 1, title: "Recents", photos: ImageDetail.gallery),
-    
+  static let mockDataAllAlbums: [AllAlbums] = [
     // "Favorites" gets just the first 15 photos
-    ImportantAlbum(order: 2, title: "Favorites", photos: Array(ImageDetail.gallery.prefix(15))),
+    AllAlbums(order: 1, title: "Favorites", photos: Array(ImageDetail.gallery.prefix(15))),
     
     // "Selfies" gets the last 8 photos
-    ImportantAlbum(order: 3, title: "Camera", photos: Array(ImageDetail.gallery.suffix(8))),
+    AllAlbums(order: 2, title: "Camera", photos: Array(ImageDetail.gallery.suffix(8))),
     
     // "Live Photos" skips the first 10, then grabs the next 20
-    ImportantAlbum(order: 4, title: "Videos", photos: Array(ImageDetail.gallery.dropFirst(10).prefix(20))),
+    AllAlbums(order: 3, title: "Videos", photos: Array(ImageDetail.gallery.dropFirst(10).prefix(20))),
     
     // "Portrait" gets the first 5 photos
-    ImportantAlbum(order: 5, title: "Airdrop", photos: Array(ImageDetail.gallery.prefix(5))),
+    AllAlbums(order: 4, title: "Airdrop", photos: Array(ImageDetail.gallery.prefix(5))),
     
     // "Panoramas" gets just the last 2 photos
-    ImportantAlbum(order: 6, title: "Lightroom", photos: Array(ImageDetail.gallery.suffix(2)))
+    AllAlbums(order: 5, title: "Lightroom", photos: Array(ImageDetail.gallery.suffix(2))),
+    
+    AllAlbums(order: 6, title: "Screenshots", photos: Array(ImageDetail.gallery.prefix(35))),
+    
+    AllAlbums(order: 7, title: "Downloads", photos: Array(ImageDetail.gallery.suffix(15))),
+    
+    AllAlbums(order: 8, title: "Screen Recording", photos: Array(ImageDetail.gallery.suffix(35))),
+    
+    AllAlbums(order: 9, title: "Whatsapp", photos: Array(ImageDetail.gallery.suffix(50))),
+  ]
+  
+  static let mockDataImportantAlbums: [AllAlbums] = [
+    AllAlbums(order: 1, title: "Favorites", photos: Array(ImageDetail.gallery.prefix(15))),
+    AllAlbums(order: 2, title: "Camera", photos: Array(ImageDetail.gallery.suffix(15))),
+    AllAlbums(order: 3, title: "Airdrop", photos: Array(ImageDetail.gallery.prefix(5))),
+    AllAlbums(order: 4, title: "Lightroom", photos: Array(ImageDetail.gallery.suffix(9))),
+    AllAlbums(order: 5, title: "Screenshots", photos: Array(ImageDetail.gallery.suffix(50))),
   ]
 #endif
 }
 
-struct Album: Identifiable {
-  let id = UUID()
-  var title: String
-  var count: Int
-  
-#if DEBUG
-  static let mockData: [Album] = [
-    Album(title: "Bali Vacation 2023", count: 450),
-    Album(title: "Family", count: 1205),
-    Album(title: "Pets", count: 834),
-    Album(title: "Memes", count: 152),
-    Album(title: "Food & Recipes", count: 89),
-    Album(title: "Travel Ideas", count: 24),
-    Album(title: "Work Receipts", count: 67),
-    Album(title: "Christmas 2022", count: 120),
-    Album(title: "Halloween Outfits", count: 35),
-    Album(title: "Concerts", count: 210),
-    Album(title: "Cross Country Road Trip", count: 642),
-    Album(title: "Sarah's Wedding", count: 315),
-    Album(title: "New York Trip", count: 288),
-    Album(title: "Tokyo Adventures", count: 531),
-    Album(title: "Summer 2021", count: 412),
-    Album(title: "Ski Trip", count: 145),
-    Album(title: "Nature & Landscapes", count: 390),
-    Album(title: "Art References", count: 76),
-    Album(title: "Apartment Hunting", count: 43),
-    Album(title: "Fitness Progress", count: 28),
-    Album(title: "Funny Screenshots", count: 504),
-    Album(title: "Birthdays", count: 198),
-    Album(title: "Camping in Yosemite", count: 260),
-    Album(title: "Car Project", count: 112),
-    Album(title: "College Memories", count: 875),
-    Album(title: "Random / Misc", count: 45)
-  ]
-#endif
-}
+//struct Album: Identifiable {
+//  let id = UUID()
+//  var title: String
+//  var count: Int
+//  
+//#if DEBUG
+//  static let mockData: [Album] = [
+//    Album(title: "Bali Vacation 2023", count: 450),
+//    Album(title: "Family", count: 1205),
+//    Album(title: "Pets", count: 834),
+//    Album(title: "Memes", count: 152),
+//    Album(title: "Food & Recipes", count: 89),
+//    Album(title: "Travel Ideas", count: 24),
+//    Album(title: "Work Receipts", count: 67),
+//    Album(title: "Christmas 2022", count: 120),
+//    Album(title: "Halloween Outfits", count: 35),
+//    Album(title: "Concerts", count: 210),
+//    Album(title: "Cross Country Road Trip", count: 642),
+//    Album(title: "Sarah's Wedding", count: 315),
+//    Album(title: "New York Trip", count: 288),
+//    Album(title: "Tokyo Adventures", count: 531),
+//    Album(title: "Summer 2021", count: 412),
+//    Album(title: "Ski Trip", count: 145),
+//    Album(title: "Nature & Landscapes", count: 390),
+//    Album(title: "Art References", count: 76),
+//    Album(title: "Apartment Hunting", count: 43),
+//    Album(title: "Fitness Progress", count: 28),
+//    Album(title: "Funny Screenshots", count: 504),
+//    Album(title: "Birthdays", count: 198),
+//    Album(title: "Camping in Yosemite", count: 260),
+//    Album(title: "Car Project", count: 112),
+//    Album(title: "College Memories", count: 875),
+//    Album(title: "Random / Misc", count: 45)
+//  ]
+//#endif
+//}
 
 // end of model for ALBUMS
 
