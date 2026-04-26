@@ -56,7 +56,6 @@ struct AlbumDetailView: View {
     .toolbar(isSelectShowing ? .hidden : .visible, for: .tabBar)
     .preferredColorScheme(.dark)
     .toolbar {
-      // Top Toolbar (Select/Cancel)
       ToolbarItem(placement: .topBarTrailing) {
         if isSelectShowing {
           Button("Cancel") {
@@ -73,14 +72,17 @@ struct AlbumDetailView: View {
       // Bottom Toolbar (Actions)
       if isSelectShowing {
         ToolbarItemGroup(placement: .bottomBar) {
-          Button(action: { /* Share Action */ }) {
+          ShareLink(
+            items: selectedPhotos.map {$0.caption},
+            subject: Text("Your Photos"),
+            message: Text("Check out these photos!"),
+          ){
             Image(systemName: "square.and.arrow.up")
           }.disabled(selectedPhotos.isEmpty)
           
           Spacer()
           
           Button(action: {
-            // remove function
             isShowingDialog = true
           }){
             Image(systemName: "trash")

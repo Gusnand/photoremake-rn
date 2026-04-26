@@ -67,16 +67,17 @@ struct LibraryViewRemake: View {
           }
           if isSelectMode {
             ToolbarItemGroup(placement: .bottomBar){
-              Button(action: {
-                // share action
-              }) {
+              ShareLink(
+//                items: Array(selectedPhotos),
+                items: selectedPhotos.map {$0.caption},
+                subject: Text("Your Photos"),
+                message: Text("Check out these photos!"),
+//                preview: SharePreview("Sharing \(selectedPhotos.count) Photos")
+              ){
                 Image(systemName: "square.and.arrow.up")
               }.disabled(selectedPhotos.isEmpty)
-              
               Spacer()
-              
               Button(action: {
-                // remove function
                 isShowingDialog = true
               }){
                 Image(systemName: "trash")

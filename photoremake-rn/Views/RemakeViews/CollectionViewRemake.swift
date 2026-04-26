@@ -7,7 +7,9 @@ struct CollectionViewRemake: View {
     GridItem(.flexible(), spacing: 16)
   ]
   
-  @State private var importantCollection = AllAlbums.mockDataImportantAlbums
+  @State private var allAlbums = AllAlbums.mockDataAllAlbums
+  @State private var importantAlbums: [AllAlbums] = []
+  @State private var isShowingAlbumPicker = false
   
   var body: some View {
     NavigationStack{
@@ -21,7 +23,7 @@ struct CollectionViewRemake: View {
         }.scenePadding(.bottom)
         ScrollView{
           LazyVGrid(columns: columns, spacing: 18) {
-            ForEach($importantCollection) {$album in
+            ForEach($importantAlbums) {$album in
               NavigationLink {
                 AlbumDetailView(album: $album)
               } label : {
@@ -65,46 +67,30 @@ struct CollectionViewRemake: View {
           .toolbar{
             ToolbarItem(placement: .topBarTrailing){
               Menu {
-                ControlGroup {
-                  Button {
-                    // action
-                  } label :{
-                    Image(systemName: "rectangle.grid.3x1.fill")
-                  }
-                  Button {
-                    // action
-                  } label :{
-                    Image(systemName: "rectangle.grid.3x3.fill")
-                  }
-                  Button {
-                    // action
-                  } label :{
-                    Image(systemName: "rectangle.grid.2x2.fill")
-                  }
-                }
-                
-                Button("Show All", systemImage: "") {
-                  // action
-                }
-                Button("Collapse All", systemImage: "") {
-                  // action
+                Button("Choose Important Albums", systemImage: "") {
+                  isShowingAlbumPicker = true // Opens the sheet!
                 }
                 Divider()
-                Button ("Reorder", systemImage: "") {
+                Button ("Select", systemImage: "") {
                   // action
                 }
               } label: {
                 Image(systemName: "ellipsis")
               }
             }
-            ToolbarSpacer(placement: .topBarTrailing)
-            ToolbarItem(placement: .primaryAction){
-              Button(action: {
-                //action
-              }) {
-                Image(systemName: "plus")
-              }
+          }
+          .onAppear {
+            // Initialize the important albums safely on the first load
+            if importantAlbums.isEmpty {
+              // For example: grab the first 5 albums to be "important" by default
+              importantAlbums = Array(allAlbums.prefix(5))
             }
+          }
+          .sheet(isPresented: $isShowingAlbumPicker) {
+            ChooseAlbumsSheet(
+              allAlbums: allAlbums,
+              importantAlbums: $importantAlbums // Pass the binding!
+            )
           }
       }.padding()
     }.preferredColorScheme(.dark)
