@@ -27,8 +27,7 @@ struct CollectionViewRemake: View {
           Text("Important Albums").font(.title3).fontWeight(.light)
           Spacer()
           NavigationLink("See All") {
-            // Assuming AllAlbumView exists in your project
-            // AllAlbumView()
+            AllAlbumView()
           }
         }.scenePadding(.bottom)
         
@@ -60,16 +59,8 @@ struct CollectionViewRemake: View {
         .toolbarTitleDisplayMode(.inlineLarge)
         .toolbar {
           ToolbarItem(placement: .topBarTrailing) {
-            Menu {
-              Button("Choose Important Albums", systemImage: "") {
-                isShowingAlbumPicker = true
-              }
-              Divider()
-              Button("Select", systemImage: "") {
-                // action
-              }
-            } label: {
-              Image(systemName: "ellipsis")
+            Button("Choose Important Albums", systemImage: "photo.badge.checkmark") {
+              isShowingAlbumPicker = true
             }
           }
         }

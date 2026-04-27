@@ -8,7 +8,6 @@ struct ContentViewRemake: View {
       LibraryViewRemake(imageArray: $imageArray).tabItem{
         Label ("Library", systemImage: "photo.fill.on.rectangle.fill")
       }
-      
       CollectionViewRemake(imageArray: $imageArray).tabItem {
         Label("Albums", systemImage: "photo.stack")
       }
