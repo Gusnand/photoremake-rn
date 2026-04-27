@@ -27,7 +27,7 @@ struct CollectionViewRemake: View {
           Text("Important Albums").font(.title3).fontWeight(.light)
           Spacer()
           NavigationLink("See All") {
-            AllAlbumView()
+            AllAlbumView(photos: $imageArray)
           }
         }.scenePadding(.bottom)
         
@@ -43,9 +43,13 @@ struct CollectionViewRemake: View {
             .buttonStyle(.plain)
             
             // 4. Your existing loop for the rest of the important albums
-            ForEach($importantAlbums) { $album in
+            ForEach(importantAlbums) { album in
               NavigationLink {
-                AlbumDetailView(album: $album)
+                AlbumDetailView(
+                  albumTitle: album.title,
+                  displayedPhotoIDs: album.photos.map(\.id),
+                  photos: $imageArray
+                )
               } label: {
                 albumThumbnail(for: album) // Using the helper below to keep code clean!
               }

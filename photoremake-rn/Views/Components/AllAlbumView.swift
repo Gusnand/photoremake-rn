@@ -6,17 +6,22 @@ struct AllAlbumView: View {
     GridItem(.flexible(), spacing: 16),
     GridItem(.flexible(), spacing: 16)
   ]
-  
+
+  @Binding var photos: [ImageDetail]
   @State private var AllAlbum = AllAlbums.mockDataAllAlbums
-  
+
   var body: some View {
     NavigationStack{
       VStack (alignment: .leading, spacing: 14){
         ScrollView{
           LazyVGrid(columns: columns, spacing: 18) {
-            ForEach($AllAlbum) {$album in
+            ForEach(AllAlbum) { album in
               NavigationLink (destination:{
-                AlbumDetailView(album: $album)
+                AlbumDetailView(
+                  albumTitle: album.title,
+                  displayedPhotoIDs: album.photos.map(\.id),
+                  photos: $photos
+                )
               }, label : {
                 VStack(alignment: .leading, spacing: 4) {
                   Group {
@@ -62,5 +67,5 @@ struct AllAlbumView: View {
 }
 
 #Preview {
-  AllAlbumView()
+  AllAlbumView(photos: .constant(ImageDetail.gallery))
 }
