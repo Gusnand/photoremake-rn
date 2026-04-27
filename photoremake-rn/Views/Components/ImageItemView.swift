@@ -1,35 +1,48 @@
 import SwiftUI
 
 struct ImageItemView: View {
-  @Binding var image: ImageDetail
+  let allPhotos: [ImageDetail]
   
-//  @State var caption: String
+  @Binding var image: ImageDetail
   @State private var isShowingInfo = false
   
   var body: some View {
     ZStack {
       Color.black.ignoresSafeArea()
       
-      Image(image.filename)
-        .resizable()
-        .scaledToFit()
+      VStack(spacing: 0) {
+        // 3. THE BIG PAGING VIEW
+        TabView(selection: $image) {
+          ForEach(allPhotos) { photo in
+            Image(photo.filename)
+              .resizable()
+              .scaledToFit()
+            // The tag is CRITICAL. It tells the TabView which photo is which
+              .tag(photo)
+          }
+        }
+        .tabViewStyle(.page(indexDisplayMode: .never)) // Native swipe gesture!
+        
+        // 4. THE SCRUBBER (See below)
+        scrubberView
+      }
     }
     // Native bottom toolbar setup
     .toolbar {
       ToolbarItemGroup(placement: .bottomBar) {
-        // 1. Share
         Button(action: { /* Share Action */ }) {
           Image(systemName: "square.and.arrow.up")
         }
         Spacer()
-        
-        // 2. Favorite (We will build this function next!)
-        Button(action: { /* Favorite Action */ }) {
-          Image(systemName: "heart")
+        Button(action: {
+          withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
+            image.isFavorite.toggle()
+          }
+        }) {
+          Image(systemName: image.isFavorite ? "heart.fill" : "heart")
+            .foregroundColor(image.isFavorite ? .white : .white)
         }
         Spacer()
-        
-        // 3. INFO BUTTON (Triggers the Sheet)
         Button(action: {
           isShowingInfo = true
         }) {
@@ -37,13 +50,7 @@ struct ImageItemView: View {
         }
         Spacer()
         
-        // 4. Adjust/Sliders
-        Button(action: { /* Adjust Action */ }) {
-          Image(systemName: "slider.horizontal.3")
-        }
         Spacer()
-        
-        // 5. Trash
         Button(action: { /* Delete Action */ }) {
           Image(systemName: "trash")
         }
@@ -55,5 +62,53 @@ struct ImageItemView: View {
     }
     .preferredColorScheme(.dark)
     .toolbar(.hidden, for: .tabBar)
+  }
+  
+  private var scrubberView: some View {
+    ScrollViewReader { proxy in
+      ScrollView(.horizontal, showsIndicators: false) {
+        LazyHStack(spacing: 2) {
+          ForEach(allPhotos) { photo in
+            Image(photo.filename)
+              .resizable()
+              .scaledToFill()
+              .frame(width: 30, height: 40)
+              .clipped()
+            // Make non-selected photos slightly faded
+              .opacity(photo == image ? 1.0 : 0.5)
+            // Add the white border to the selected photo
+              .overlay {
+                if photo == image {
+                  Rectangle().stroke(Color.white, lineWidth: 2)
+                }
+              }
+            // Give it an ID so the proxy can find it
+              .id(photo.id)
+              .onTapGesture {
+                // If they tap a thumbnail, jump to it!
+                withAnimation {
+                  image = photo
+                }
+              }
+          }
+        }
+        .padding(.vertical, 8)
+      }
+      .frame(height: 50)
+      .background(Color.black)
+      
+      // 5. THE SYNCHRONIZATION MAGIC
+      // When the user swipes the big image, scroll the bottom bar to match
+      .onChange(of: image) { oldValue, newValue in
+        withAnimation {
+          // Use the 'newValue' to scroll to the correct ID
+          proxy.scrollTo(newValue.id, anchor: .center)
+        }
+      }
+      // When the page first loads, immediately center the scrubber
+      .onAppear {
+        proxy.scrollTo(image.id, anchor: .center)
+      }
+    }
   }
 }

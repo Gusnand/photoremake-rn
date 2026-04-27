@@ -12,9 +12,7 @@ struct ContentView: View {
       Tab("Collection", systemImage: "photo.stack"){
         CollectionView()
       }
-      Tab(role: .search){
-        Text("Search Page")
-      }
+      
     }
   }
 }

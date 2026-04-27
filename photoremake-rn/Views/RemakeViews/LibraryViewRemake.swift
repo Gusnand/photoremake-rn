@@ -21,7 +21,7 @@ struct ZippedPhotos: Transferable {
             }
             
             // 2. Use your existing createZipAtTmp function
-            let zipURL = try createZipAtTmp(
+            let zipURL = try await createZipAtTmp(
                 zipFilename: "Organized_Photos_\(Int(Date().timeIntervalSince1970))",
                 filesToZip: filesToZip
             )
@@ -68,11 +68,11 @@ struct LibraryViewRemake: View {
                   }
                 }
             } else {
-              NavigationLink {
-                ImageItemView(image: $image)
-              } label: {
+              NavigationLink (destination: {
+                ImageItemView(allPhotos: imageArray, image: $image)
+              }, label: {
                 Image(image.filename).resizable().scaledToFill().frame(height: 120).clipped().clipShape(RoundedRectangle(cornerRadius: 4))
-              }
+              })
             }
           }
         }
@@ -80,12 +80,8 @@ struct LibraryViewRemake: View {
         .navigationTitle("Library")
         .navigationSubtitle(Date().formatted())
         .toolbarTitleDisplayMode(.inlineLarge)
-        .toolbar(isSelectMode ? .hidden : .visible, for: .tabBar)
+        .toolbar(isSelectMode ? .hidden : .automatic, for: .tabBar)
         .toolbar{
-          ToolbarItem(){
-            Image(systemName: "ellipsis")
-          }
-          ToolbarSpacer(placement: .topBarTrailing)
           ToolbarItem(placement: .topBarTrailing){
             if isSelectMode {
               Button("Cancel", systemImage: "xmark"){

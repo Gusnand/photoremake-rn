@@ -42,18 +42,18 @@ struct AlbumDetailView: View {
                 }
               }
           }else {
-            NavigationLink {
-              ImageItemView(image: $photo)
-            } label : {
+            NavigationLink (destination: {
+              ImageItemView(allPhotos: album.photos, image: $photo)
+            }, label : {
               Image(photo.filename).resizable().scaledToFill().frame(height: 120).clipped()
-            }
+            })
           }
         }
       }
     }
     .navigationTitle(album.title)
     .navigationBarTitleDisplayMode(.inline)
-    .toolbar(isSelectShowing ? .hidden : .visible, for: .tabBar)
+    .toolbar(isSelectShowing ? .hidden : .automatic, for: .tabBar)
     .preferredColorScheme(.dark)
     .toolbar {
       ToolbarItem(placement: .topBarTrailing) {

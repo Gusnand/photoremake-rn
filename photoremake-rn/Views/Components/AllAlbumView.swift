@@ -15,9 +15,9 @@ struct AllAlbumView: View {
         ScrollView{
           LazyVGrid(columns: columns, spacing: 18) {
             ForEach($AllAlbum) {$album in
-              NavigationLink {
+              NavigationLink (destination:{
                 AlbumDetailView(album: $album)
-              } label : {
+              }, label : {
                 VStack(alignment: .leading, spacing: 4) {
                   Group {
                     if let cover = album.coverPhoto {
@@ -48,7 +48,7 @@ struct AllAlbumView: View {
                     .font(.caption)
                     .foregroundColor(.gray)
                 }
-              }
+              })
               .buttonStyle(.plain)
             }
           }

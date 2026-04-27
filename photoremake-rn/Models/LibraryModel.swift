@@ -18,7 +18,7 @@ struct AllAlbums: Identifiable {
 #if DEBUG
   static let mockDataAllAlbums: [AllAlbums] = [
     // "Favorites" gets just the first 15 photos
-    AllAlbums(order: 1, title: "Favorites", photos: Array(ImageDetail.gallery.prefix(15))),
+//    AllAlbums(order: 1, title: "Favorites", photos: Array(ImageDetail.gallery.prefix(15))),
     
     // "Selfies" gets the last 8 photos
     AllAlbums(order: 2, title: "Camera", photos: Array(ImageDetail.gallery.suffix(8))),
@@ -74,6 +74,8 @@ struct ImageDetail: Identifiable, Hashable, Equatable {
   var resolution: Resolution
   var fileType: String
   var fileLocation: String
+  
+  var isFavorite: Bool = false
   
 #if DEBUG
   static let gallery: [ImageDetail] = [
