@@ -39,6 +39,11 @@ struct ImageItemView: View {
           Image(systemName: "square.and.arrow.up")
         }
         Spacer()
+        Button(action: { /* Delete Action */ }) {
+          Image(systemName: "trash")
+        }
+      }
+      ToolbarItemGroup(placement: .status) {
         Button(action: {
           withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
             toggleFavorite()
@@ -48,19 +53,12 @@ struct ImageItemView: View {
             .foregroundColor(.white)
         }
         .disabled(selectedPhotoBinding == nil)
-        Spacer()
         Button(action: {
           isShowingInfo = true
         }) {
           Image(systemName: "info.circle")
         }
         .disabled(selectedPhotoBinding == nil)
-        Spacer()
-        
-        Spacer()
-        Button(action: { /* Delete Action */ }) {
-          Image(systemName: "trash")
-        }
       }
     }
     .sheet(isPresented: $isShowingInfo) {
