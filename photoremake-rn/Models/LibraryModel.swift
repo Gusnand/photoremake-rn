@@ -147,7 +147,6 @@ struct ImageDetail: Identifiable, Hashable, Equatable {
 
 extension ImageDetail: Transferable {
   static var transferRepresentation: some TransferRepresentation {
-    // Export the actual Image instead of the caption
     ProxyRepresentation(exporting: { detail in
         Image(detail.filename)
     })

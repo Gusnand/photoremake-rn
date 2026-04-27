@@ -69,7 +69,7 @@ struct LibraryViewRemake: View {
                 }
             } else {
               NavigationLink (destination: {
-                ImageItemView(allPhotos: imageArray, image: $image)
+                ImageItemView(photos: $imageArray, initialPhotoID: image.id)
               }, label: {
                 Image(image.filename).resizable().scaledToFill().frame(height: 120).clipped().clipShape(RoundedRectangle(cornerRadius: 4))
               })

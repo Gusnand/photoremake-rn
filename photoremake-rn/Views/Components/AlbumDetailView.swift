@@ -43,7 +43,11 @@ struct AlbumDetailView: View {
               }
           }else {
             NavigationLink (destination: {
-              ImageItemView(allPhotos: album.photos, image: $photo)
+              ImageItemView(
+                photos: $album.photos,
+                initialPhotoID: photo.id,
+                displayedPhotoIDs: album.photos.map(\.id)
+              )
             }, label : {
               Image(photo.filename).resizable().scaledToFill().frame(height: 120).clipped()
             })

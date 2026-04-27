@@ -36,8 +36,7 @@ struct CollectionViewRemake: View {
             
             // 3. NEW: Pin the Smart Favorites Album to the top of the grid!
             NavigationLink {
-              // We use .constant because the master list controls this data
-              AlbumDetailView(album: .constant(favoritesAlbum))
+              FavoritesAlbumDetailView(photos: $imageArray)
             } label: {
               albumThumbnail(for: favoritesAlbum)
             }
@@ -118,4 +117,61 @@ struct CollectionViewRemake: View {
 // 5. NEW: Update the preview to pass the required binding
 #Preview {
   CollectionViewRemake(imageArray: .constant(ImageDetail.gallery))
+}
+
+private struct FavoritesAlbumDetailView: View {
+  @Binding var photos: [ImageDetail]
+
+  private let columns = [
+    GridItem(.flexible(), spacing: 1),
+    GridItem(.flexible(), spacing: 1),
+    GridItem(.flexible(), spacing: 1)
+  ]
+
+  private var favoritePhotos: [ImageDetail] {
+    photos.filter(\.isFavorite)
+  }
+
+  var body: some View {
+    ScrollView {
+      HStack {
+        Text("\(favoritePhotos.count) Photos")
+          .font(.subheadline)
+          .foregroundColor(.gray)
+        Spacer()
+      }
+      .padding(.horizontal)
+      .padding(.bottom, 8)
+
+      if favoritePhotos.isEmpty {
+        ContentUnavailableView(
+          "No Favorites Yet",
+          systemImage: "heart.slash",
+          description: Text("Favorite photos from the library and they will appear here.")
+        )
+        .padding(.top, 48)
+      } else {
+        LazyVGrid(columns: columns, spacing: 1) {
+          ForEach(favoritePhotos) { photo in
+            NavigationLink {
+              ImageItemView(
+                photos: $photos,
+                initialPhotoID: photo.id,
+                displayedPhotoIDs: favoritePhotos.map(\.id)
+              )
+            } label: {
+              Image(photo.filename)
+                .resizable()
+                .scaledToFill()
+                .frame(height: 120)
+                .clipped()
+            }
+          }
+        }
+      }
+    }
+    .navigationTitle("Favorites")
+    .navigationBarTitleDisplayMode(.inline)
+    .preferredColorScheme(.dark)
+  }
 }

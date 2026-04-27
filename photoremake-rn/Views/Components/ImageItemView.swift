@@ -1,33 +1,38 @@
 import SwiftUI
 
 struct ImageItemView: View {
-  let allPhotos: [ImageDetail]
-  
-  @Binding var image: ImageDetail
+  @Binding var photos: [ImageDetail]
+  private let displayedPhotoIDs: [ImageDetail.ID]?
+
+  @State private var selectedPhotoID: ImageDetail.ID
   @State private var isShowingInfo = false
-  
+
+  init(
+    photos: Binding<[ImageDetail]>,
+    initialPhotoID: ImageDetail.ID,
+    displayedPhotoIDs: [ImageDetail.ID]? = nil
+  ) {
+    _photos = photos
+    self.displayedPhotoIDs = displayedPhotoIDs
+    _selectedPhotoID = State(initialValue: initialPhotoID)
+  }
+
   var body: some View {
     ZStack {
       Color.black.ignoresSafeArea()
-      
       VStack(spacing: 0) {
-        // 3. THE BIG PAGING VIEW
-        TabView(selection: $image) {
-          ForEach(allPhotos) { photo in
+        TabView(selection: $selectedPhotoID) {
+          ForEach(displayedPhotos) { photo in
             Image(photo.filename)
               .resizable()
               .scaledToFit()
-            // The tag is CRITICAL. It tells the TabView which photo is which
-              .tag(photo)
+              .tag(photo.id)
           }
         }
-        .tabViewStyle(.page(indexDisplayMode: .never)) // Native swipe gesture!
-        
-        // 4. THE SCRUBBER (See below)
+        .tabViewStyle(.page(indexDisplayMode: .never))
         scrubberView
       }
     }
-    // Native bottom toolbar setup
     .toolbar {
       ToolbarItemGroup(placement: .bottomBar) {
         Button(action: { /* Share Action */ }) {
@@ -36,18 +41,20 @@ struct ImageItemView: View {
         Spacer()
         Button(action: {
           withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
-            image.isFavorite.toggle()
+            toggleFavorite()
           }
         }) {
-          Image(systemName: image.isFavorite ? "heart.fill" : "heart")
-            .foregroundColor(image.isFavorite ? .white : .white)
+          Image(systemName: selectedPhoto?.isFavorite == true ? "heart.fill" : "heart")
+            .foregroundColor(.white)
         }
+        .disabled(selectedPhotoBinding == nil)
         Spacer()
         Button(action: {
           isShowingInfo = true
         }) {
           Image(systemName: "info.circle")
         }
+        .disabled(selectedPhotoBinding == nil)
         Spacer()
         
         Spacer()
@@ -56,38 +63,72 @@ struct ImageItemView: View {
         }
       }
     }
-    // Apply the sheet modifier to the ZStack
     .sheet(isPresented: $isShowingInfo) {
-      ImageInfoSheet(image: $image)
+      if let selectedPhotoBinding {
+        ImageInfoSheet(image: selectedPhotoBinding)
+      }
     }
     .preferredColorScheme(.dark)
     .toolbar(.hidden, for: .tabBar)
   }
-  
+
+  private var displayedPhotos: [ImageDetail] {
+    guard let displayedPhotoIDs else {
+      return photos
+    }
+
+    let displayedIDSet = Set(displayedPhotoIDs)
+    return photos.filter { displayedIDSet.contains($0.id) }
+  }
+
+  private var selectedPhotoIndex: Int? {
+    photos.firstIndex { $0.id == selectedPhotoID }
+  }
+
+  private var selectedPhoto: ImageDetail? {
+    guard let selectedPhotoIndex else {
+      return nil
+    }
+
+    return photos[selectedPhotoIndex]
+  }
+
+  private var selectedPhotoBinding: Binding<ImageDetail>? {
+    guard let selectedPhotoIndex else {
+      return nil
+    }
+
+    return $photos[selectedPhotoIndex]
+  }
+
+  private func toggleFavorite() {
+    guard let selectedPhotoBinding else {
+      return
+    }
+
+    selectedPhotoBinding.wrappedValue.isFavorite.toggle()
+  }
+
   private var scrubberView: some View {
     ScrollViewReader { proxy in
       ScrollView(.horizontal, showsIndicators: false) {
         LazyHStack(spacing: 2) {
-          ForEach(allPhotos) { photo in
+          ForEach(displayedPhotos) { photo in
             Image(photo.filename)
               .resizable()
               .scaledToFill()
               .frame(width: 30, height: 40)
               .clipped()
-            // Make non-selected photos slightly faded
-              .opacity(photo == image ? 1.0 : 0.5)
-            // Add the white border to the selected photo
+              .opacity(photo.id == selectedPhotoID ? 1.0 : 0.5)
               .overlay {
-                if photo == image {
+                if photo.id == selectedPhotoID {
                   Rectangle().stroke(Color.white, lineWidth: 2)
                 }
               }
-            // Give it an ID so the proxy can find it
               .id(photo.id)
               .onTapGesture {
-                // If they tap a thumbnail, jump to it!
                 withAnimation {
-                  image = photo
+                  selectedPhotoID = photo.id
                 }
               }
           }
@@ -96,18 +137,29 @@ struct ImageItemView: View {
       }
       .frame(height: 50)
       .background(Color.black)
-      
-      // 5. THE SYNCHRONIZATION MAGIC
-      // When the user swipes the big image, scroll the bottom bar to match
-      .onChange(of: image) { oldValue, newValue in
+      .onChange(of: selectedPhotoID) { _, newValue in
         withAnimation {
-          // Use the 'newValue' to scroll to the correct ID
-          proxy.scrollTo(newValue.id, anchor: .center)
+          proxy.scrollTo(newValue, anchor: .center)
         }
       }
-      // When the page first loads, immediately center the scrubber
       .onAppear {
-        proxy.scrollTo(image.id, anchor: .center)
+        proxy.scrollTo(selectedPhotoID, anchor: .center)
+      }
+    }
+  }
+}
+
+#Preview {
+  PreviewImageItemView()
+}
+
+private struct PreviewImageItemView: View {
+  @State private var photos = Array(ImageDetail.gallery.prefix(6))
+
+  var body: some View {
+    NavigationStack {
+      if let initialPhotoID = photos.first?.id {
+        ImageItemView(photos: $photos, initialPhotoID: initialPhotoID)
       }
     }
   }
