@@ -64,21 +64,16 @@ struct CollectionViewRemake: View {
         }.scrollIndicators(.hidden)
           .navigationTitle("Albums")
           .toolbarTitleDisplayMode(.inlineLarge)
-          .toolbar{
-            ToolbarItem(placement: .topBarTrailing){
-              Menu {
-                Button("Choose Important Albums", systemImage: "") {
-                  isShowingAlbumPicker = true // Opens the sheet!
-                }
-                Divider()
-                Button ("Select", systemImage: "") {
-                  // action
-                }
+          .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+              Button {
+                isShowingAlbumPicker = true // Opens the sheet directly!
               } label: {
                 Image(systemName: "ellipsis")
               }
             }
           }
+
           .onAppear {
             // Initialize the important albums safely on the first load
             if importantAlbums.isEmpty {
