@@ -56,50 +56,6 @@ struct AllAlbumView: View {
           .navigationTitle("Albums")
           .navigationBarTitleDisplayMode(.inline)
           .toolbarTitleDisplayMode(.inlineLarge)
-          .toolbar{
-            ToolbarItem(placement: .topBarTrailing){
-              Menu {
-                ControlGroup {
-                  Button {
-                    // action
-                  } label :{
-                    Image(systemName: "rectangle.grid.3x1.fill")
-                  }
-                  Button {
-                    // action
-                  } label :{
-                    Image(systemName: "rectangle.grid.3x3.fill")
-                  }
-                  Button {
-                    // action
-                  } label :{
-                    Image(systemName: "rectangle.grid.2x2.fill")
-                  }
-                }
-                
-                Button("Show All", systemImage: "") {
-                  // action
-                }
-                Button("Collapse All", systemImage: "") {
-                  // action
-                }
-                Divider()
-                Button ("Reorder", systemImage: "") {
-                  // action
-                }
-              } label: {
-                Image(systemName: "ellipsis")
-              }
-            }
-            ToolbarSpacer(placement: .topBarTrailing)
-            ToolbarItem(placement: .primaryAction){
-              Button(action: {
-                //action
-              }) {
-                Image(systemName: "plus")
-              }
-            }
-          }
       }.padding()
     }.preferredColorScheme(.dark)
   }
