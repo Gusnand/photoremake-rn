@@ -69,7 +69,7 @@ struct CollectionViewRemake: View {
               Button {
                 isShowingAlbumPicker = true // Opens the sheet directly!
               } label: {
-                Image(systemName: "ellipsis")
+                Image(systemName: "photo.badge.plus")
               }
             }
           }
