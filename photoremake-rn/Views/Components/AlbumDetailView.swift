@@ -43,7 +43,7 @@ struct AlbumDetailView: View {
               }
           }else {
             NavigationLink {
-              ImageItemView(image: $photo, caption: "")
+              ImageItemView(image: $photo)
             } label : {
               Image(photo.filename).resizable().scaledToFill().frame(height: 120).clipped()
             }

@@ -13,7 +13,7 @@ struct LibraryView: View {
         LazyVGrid(columns: columns, spacing: 1) {
           ForEach($imageArray) {image in
             NavigationLink {
-              ImageItemView(image: image, caption: "")
+              ImageItemView(image: image)
             } label: {
               Image(image.filename
                 .wrappedValue).resizable().scaledToFill().frame(height: 120).clipped().clipShape(RoundedRectangle(cornerRadius: 4))

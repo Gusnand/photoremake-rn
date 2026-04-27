@@ -2,22 +2,58 @@ import SwiftUI
 
 struct ImageItemView: View {
   @Binding var image: ImageDetail
-  @State var caption: String
+  
+//  @State var caption: String
+  @State private var isShowingInfo = false
   
   var body: some View {
-    VStack(alignment: .leading) {
-      Image(image.filename).resizable().scaledToFit()
-      Text(image.caption)
-      TextField(image.caption, text: $caption).foregroundStyle(Color.secondary)
-      Button{
-        image.caption = caption
-      }label: {
-        Label("Save", systemImage: "chevron.forward")
+    ZStack {
+      Color.black.ignoresSafeArea()
+      
+      Image(image.filename)
+        .resizable()
+        .scaledToFit()
+    }
+    // Native bottom toolbar setup
+    .toolbar {
+      ToolbarItemGroup(placement: .bottomBar) {
+        // 1. Share
+        Button(action: { /* Share Action */ }) {
+          Image(systemName: "square.and.arrow.up")
+        }
+        Spacer()
+        
+        // 2. Favorite (We will build this function next!)
+        Button(action: { /* Favorite Action */ }) {
+          Image(systemName: "heart")
+        }
+        Spacer()
+        
+        // 3. INFO BUTTON (Triggers the Sheet)
+        Button(action: {
+          isShowingInfo = true
+        }) {
+          Image(systemName: "info.circle")
+        }
+        Spacer()
+        
+        // 4. Adjust/Sliders
+        Button(action: { /* Adjust Action */ }) {
+          Image(systemName: "slider.horizontal.3")
+        }
+        Spacer()
+        
+        // 5. Trash
+        Button(action: { /* Delete Action */ }) {
+          Image(systemName: "trash")
+        }
       }
-    }.preferredColorScheme(.dark)
+    }
+    // Apply the sheet modifier to the ZStack
+    .sheet(isPresented: $isShowingInfo) {
+      ImageInfoSheet(image: $image)
+    }
+    .preferredColorScheme(.dark)
+    .toolbar(.hidden, for: .tabBar)
   }
-}
-
-#Preview {
-  ImageItemView(image: .constant(ImageDetail.gallery[0]), caption: "")
 }
